@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = "HMQRCodeScanner"
-  s.version      = "1.0.4"
-  s.summary      = "二维码扫描及生成框架"
+  s.version      = "1.0.5"
+  s.summary      = "包含 UI 界面的轻量级二维码扫描及生成框架"
   s.homepage     = "https://github.com/liufan321/HMQRCodeScanner"
   s.license      = "MIT"
   s.author       = { "Fan Liu" => "liufan321@gmail.com" }
