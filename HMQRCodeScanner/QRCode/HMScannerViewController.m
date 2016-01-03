@@ -12,6 +12,9 @@
 #import "HMScannerMaskView.h"
 #import "HMScanner.h"
 
+/// 控件间距
+#define kControlMargin  32.0
+
 @interface HMScannerViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 /// 名片字符串
 @property (nonatomic) NSString *cardName;
@@ -140,7 +143,7 @@
     tipLabel.textAlignment = NSTextAlignmentCenter;
     
     [tipLabel sizeToFit];
-    tipLabel.center = CGPointMake(scannerBorder.center.x, CGRectGetMaxY(scannerBorder.frame) + 32.0);
+    tipLabel.center = CGPointMake(scannerBorder.center.x, CGRectGetMaxY(scannerBorder.frame) + kControlMargin);
     
     [self.view addSubview:tipLabel];
     
@@ -152,7 +155,7 @@
     [cardButton setTitleColor:self.navigationController.navigationBar.tintColor forState:UIControlStateNormal];
     
     [cardButton sizeToFit];
-    cardButton.center = CGPointMake(tipLabel.center.x, CGRectGetMaxY(tipLabel.frame) + 32.0);
+    cardButton.center = CGPointMake(tipLabel.center.x, CGRectGetMaxY(tipLabel.frame) + kControlMargin);
     
     [self.view addSubview:cardButton];
     

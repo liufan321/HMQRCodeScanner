@@ -65,21 +65,18 @@
         
         [self addSubview:img];
         
+        CGFloat offsetX = self.bounds.size.width - img.bounds.size.width;
+        CGFloat offsetY = self.bounds.size.height - img.bounds.size.height;
+        
         switch (i) {
             case 2:
-                img.frame = CGRectOffset(img.frame,
-                                         self.bounds.size.width - img.bounds.size.width,
-                                         0);
+                img.frame = CGRectOffset(img.frame, offsetX, 0);
                 break;
             case 3:
-                img.frame = CGRectOffset(img.frame,
-                                         0,
-                                         self.bounds.size.height - img.bounds.size.height);
+                img.frame = CGRectOffset(img.frame, 0, offsetY);
                 break;
             case 4:
-                img.frame = CGRectOffset(img.frame,
-                                         self.bounds.size.width - img.bounds.size.width,
-                                         self.bounds.size.height - img.bounds.size.height);
+                img.frame = CGRectOffset(img.frame, offsetX, offsetY);
                 break;
             default:
                 break;
