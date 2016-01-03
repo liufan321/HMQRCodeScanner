@@ -11,8 +11,8 @@
 @implementation HMScannerBorder {
     /// 冲击波图像
     UIImageView *scannerLine;
-    /// 图片文件数组
-    NSArray *fileNames;
+    /// 图像文件包
+    NSBundle *imageBundle;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -49,7 +49,11 @@
 - (void)prepareUI {
     self.clipsToBounds = YES;
     
-    fileNames = [[NSBundle mainBundle] pathsForResourcesOfType:@"png" inDirectory:@"HMScanner.bundle"];
+    // 图像文件包
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSURL *url = [bundle URLForResource:@"HMScanner" withExtension:@"bundle"];
+    imageBundle = [NSBundle bundleWithURL:url];
+    
     // 冲击波图像
     scannerLine = [[UIImageView alloc] initWithImage:[self imageWithName:@"QRCodeScanLine"]];
     scannerLine.frame = CGRectMake(0, 0, self.bounds.size.width, scannerLine.bounds.size.height);
@@ -86,9 +90,10 @@
 }
 
 - (UIImage *)imageWithName:(NSString *)imageName {
-    NSArray *result = [fileNames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self CONTAINS %@", imageName]];
+    NSString *fileName = [NSString stringWithFormat:@"%@@2x", imageName];
+    NSString *path = [imageBundle pathForResource:fileName ofType:@"png"];
     
-    return [UIImage imageWithContentsOfFile:result.lastObject];
+    return [UIImage imageWithContentsOfFile:path];
 }
 
 @end
