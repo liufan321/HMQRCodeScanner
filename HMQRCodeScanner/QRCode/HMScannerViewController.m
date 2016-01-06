@@ -167,7 +167,9 @@
     
     CGFloat width = self.view.bounds.size.width - 80;
     scannerBorder = [[HMScannerBorder alloc] initWithFrame:CGRectMake(0, 0, width, width)];
+    
     scannerBorder.center = self.view.center;
+    scannerBorder.tintColor = self.navigationController.navigationBar.tintColor;
     
     [self.view addSubview:scannerBorder];
     

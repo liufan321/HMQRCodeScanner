@@ -11,8 +11,6 @@
 @implementation HMScannerBorder {
     /// 冲击波图像
     UIImageView *scannerLine;
-    /// 图像文件包
-    NSBundle *imageBundle;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -52,16 +50,20 @@
     // 图像文件包
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSURL *url = [bundle URLForResource:@"HMScanner" withExtension:@"bundle"];
-    imageBundle = [NSBundle bundleWithURL:url];
+    NSBundle *imageBundle = [NSBundle bundleWithURL:url];
     
     // 冲击波图像
-    scannerLine = [[UIImageView alloc] initWithImage:[self imageWithName:@"QRCodeScanLine"]];
+    scannerLine = [[UIImageView alloc] initWithImage:[self imageWithName:@"QRCodeScanLine" bundle:imageBundle]];
+
     scannerLine.frame = CGRectMake(0, 0, self.bounds.size.width, scannerLine.bounds.size.height);
     scannerLine.center = CGPointMake(self.bounds.size.width * 0.5, 0);
+
+    [self addSubview:scannerLine];
     
+    // 加载边框图像
     for (NSInteger i = 1; i < 5; i++) {
         NSString *imgName = [NSString stringWithFormat:@"ScanQR%zd", i];
-        UIImageView *img = [[UIImageView alloc] initWithImage:[self imageWithName:imgName]];
+        UIImageView *img = [[UIImageView alloc] initWithImage:[self imageWithName:imgName bundle:imageBundle]];
         
         [self addSubview:img];
         
@@ -82,15 +84,13 @@
                 break;
         }
     }
-    
-    [self addSubview:scannerLine];
 }
 
-- (UIImage *)imageWithName:(NSString *)imageName {
+- (UIImage *)imageWithName:(NSString *)imageName bundle:(NSBundle *)imageBundle {
     NSString *fileName = [NSString stringWithFormat:@"%@@2x", imageName];
     NSString *path = [imageBundle pathForResource:fileName ofType:@"png"];
     
-    return [UIImage imageWithContentsOfFile:path];
+    return [[UIImage imageWithContentsOfFile:path] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
 
 @end
