@@ -29,7 +29,7 @@
         
         [self setTitleColor:[UIColor whiteColor] tintColor:[UIColor greenColor]];
         
-        [self pushViewController:scanner animated:YES];
+        [self pushViewController:scanner animated:NO];
     }
     return self;
 }

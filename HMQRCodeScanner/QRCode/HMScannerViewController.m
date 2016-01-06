@@ -177,7 +177,7 @@
 
 /// 准备导航栏
 - (void)prepareNavigationBar {
-    // 1> 背景图片
+    // 1> 背景颜色
     [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithWhite:0.1 alpha:1.0]];
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.shadowImage = [[UIImage alloc] init];
