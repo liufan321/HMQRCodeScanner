@@ -18,6 +18,7 @@
 
 @implementation HMScanerCardViewController {
     UIImageView *cardImageView;
+    UIBarButtonItem *downloadButton;
 }
 
 #pragma mark - 构造函数
@@ -50,13 +51,24 @@
 
 /// 准备导航栏
 - (void)prepareNavigationBar {
-    // 1> 背景颜色
+    // 1> 背景图片
     [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithWhite:0.1 alpha:1.0]];
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.shadowImage = [[UIImage alloc] init];
     
     // 2> 标题
     self.title = @"我的名片";
+    
+    // 3> 加个下载图片按钮
+    downloadButton = [[UIBarButtonItem alloc]initWithTitle:@"下载" style:UIBarButtonItemStyleBordered target:self action:@selector(downloadImage)];
+    self.navigationItem.rightBarButtonItem = downloadButton;
+}
+
+// 下载图片到用户相册
+-(void)downloadImage {
+    UIImageWriteToSavedPhotosAlbum(cardImageView.image, self, nil, nil);
+    [downloadButton setTitle:@"已下载"];
+    self.navigationItem.rightBarButtonItem.enabled = NO;
 }
 
 @end
