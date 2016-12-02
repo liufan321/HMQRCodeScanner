@@ -32,18 +32,19 @@ use_frameworks!
 pod 'HMQRCodeScanner'
 ```
 
-* 在终端中输入以下命令，安装或升级 Pod
+* 在终端中输入以下命令，安装 Pod
 
 ```bash
-# 安装 Pod，第一次使用
 $ pod install
-
-
-# 升级 Pod，后续使用
-$ pod update
 ```
 
 ## 使用
+
+* 在 `Info.plist` 中添加两个 `值对` 以授权访问 `相机` 和 `相册`
+
+    * `NSCameraUsageDescription`
+    * `NSPhotoLibraryUsageDescription`
+
 
 ### Objective-C
 

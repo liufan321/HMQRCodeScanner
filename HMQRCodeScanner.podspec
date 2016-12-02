@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "HMQRCodeScanner"
-  s.version      = "1.0.5"
+  s.version      = "1.0.6"
   s.summary      = "包含 UI 界面的轻量级二维码扫描及生成框架"
   s.homepage     = "https://github.com/liufan321/HMQRCodeScanner"
   s.license      = "MIT"
