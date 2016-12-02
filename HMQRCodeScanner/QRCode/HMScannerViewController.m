@@ -14,6 +14,8 @@
 
 /// 控件间距
 #define kControlMargin  32.0
+/// 相册图片最大尺寸
+#define kImageMaxSize   CGSizeMake(1000, 1000)
 
 @interface HMScannerViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 /// 名片字符串
@@ -106,8 +108,10 @@
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     
+    UIImage *image = [self resizeImage:info[UIImagePickerControllerOriginalImage]];
+    
     // 扫描图像
-    [HMScanner scaneImage:info[UIImagePickerControllerOriginalImage] completion:^(NSArray *values) {
+    [HMScanner scaneImage:image completion:^(NSArray *values) {
         
         if (values.count > 0) {
             self.completionCallBack(values.firstObject);
@@ -120,6 +124,28 @@
             [self dismissViewControllerAnimated:YES completion:nil];
         }
     }];
+}
+
+- (UIImage *)resizeImage:(UIImage *)image {
+    
+    if (image.size.width < kImageMaxSize.width && image.size.height < kImageMaxSize.height) {
+        return image;
+    }
+    
+    CGFloat xScale = kImageMaxSize.width / image.size.width;
+    CGFloat yScale = kImageMaxSize.height / image.size.height;
+    CGFloat scale = MIN(xScale, yScale);
+    CGSize size = CGSizeMake(image.size.width * scale, image.size.height * scale);
+    
+    UIGraphicsBeginImageContext(size);
+    
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    
+    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return result;
 }
 
 #pragma mark - 设置界面
