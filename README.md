@@ -4,9 +4,7 @@
 
 
 
-[intro]<https://raw.githubusercontent.com/sauteam/HMQRCodeScanner/master/intro.jpeg>
-
-<https://github.com/20120608/QM_HMQRCodeScanner>
+![扫描二维码](https://raw.githubusercontent.com/sauteam/HMQRCodeScanner/master/intro.jpeg)
 
 ## 功能
 
@@ -125,3 +123,8 @@ HMScannerController.cardImageWithCardName(cardName, avatar: avatar, scale: 0.2) 
 }
 ```
 
+
+
+### Special Thanks
+
+<https://github.com/20120608/QM_HMQRCodeScanner>
