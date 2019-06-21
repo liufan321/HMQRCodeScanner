@@ -15,19 +15,23 @@
 @end
 
 @implementation ViewController
+- (IBAction)myQRCodeAction:(UIBarButtonItem *)sender {
+    [self show:NO];
+}
 
 - (IBAction)clickScanButton:(id)sender {
-    
+    [self show:YES];
+}
+
+- (void)show:(BOOL)show{
     NSString *cardName = @"天涯刀哥 - 傅红雪";
     UIImage *avatar = [UIImage imageNamed:@"avatar"];
-    
     HMScannerController *scanner = [HMScannerController scannerWithCardName:cardName avatar:avatar completion:^(NSString *stringValue) {
         
         self.scanResultLabel.text = stringValue;
     }];
-    
+    scanner.scannerViewController.hideCardButton = show;
     [scanner setTitleColor:[UIColor whiteColor] tintColor:[UIColor greenColor]];
-    
     [self showDetailViewController:scanner sender:nil];
 }
 

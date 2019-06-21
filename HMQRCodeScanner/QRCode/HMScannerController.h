@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HMScannerViewController.h"
 
 /*!
  扫描控制器
@@ -39,6 +40,7 @@
  */
 @interface HMScannerController : UINavigationController
 
+@property (nonatomic, strong) HMScannerViewController *scannerViewController;
 /// 使用 `名片字符串` 实例化扫描导航控制器
 ///
 /// @param cardName   名片字符串

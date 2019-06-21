@@ -2,11 +2,18 @@
 
 包含 UI 界面的轻量级二维码扫描及生成框架
 
+
+
+[intro]<https://raw.githubusercontent.com/sauteam/HMQRCodeScanner/master/intro.jpeg>
+
+<https://github.com/20120608/QM_HMQRCodeScanner>
+
 ## 功能
 
 * 提供一个导航控制器，扫描 `二维码 / 条形码`
 * 能够生成指定 `字符串` + `avatar(可选)` 的二维码名片
 * 能够识别相册图片中的二维码(iOS 64 位设备)
+* 支持闪光灯
 
 ## 系统支持
 
@@ -83,6 +90,8 @@ UIImage *avatar = [UIImage imageNamed:@"avatar"];
     self.imageView.image = image;
 }];
 ```
+
+
 
 ### Swift
 
