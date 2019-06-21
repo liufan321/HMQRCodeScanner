@@ -8,8 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+
+
 /// 扫描控制器
 @interface HMScannerViewController : UIViewController
+
+/** 名片按钮是否隐藏 */
+@property(nonatomic,assign) BOOL hideCardButton;
+
+/** 手电按钮是否隐藏 */
+@property(nonatomic,assign) BOOL hideLightButton;
 
 /// 实例化扫描控制器
 ///

@@ -11,6 +11,7 @@
 #import "HMScannerBorder.h"
 #import "HMScannerMaskView.h"
 #import "HMScanner.h"
+#import <AVFoundation/AVFoundation.h>
 
 /// 控件间距
 #define kControlMargin  32.0
@@ -22,6 +23,9 @@
 @property (nonatomic) NSString *cardName;
 /// 头像图片
 @property (nonatomic) UIImage *avatar;
+@property (nonatomic, strong) UIButton *cardButton;
+@property (nonatomic, strong) UIButton *flashLightButton;
+
 /// 完成回调
 @property (nonatomic, copy) void (^completionCallBack)(NSString *);
 @end
@@ -75,6 +79,7 @@
     [scanner stopScan];
 }
 
+
 #pragma mark - 监听方法
 /// 点击关闭按钮
 - (void)clickCloseButton {
@@ -105,6 +110,11 @@
     [self showViewController:vc sender:nil];
 }
 
+- (void)modifyFlashLight:(UIButton *)sender {
+    [sender setSelected:[self modifyFlashLight]];
+}
+
+
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     
@@ -124,6 +134,10 @@
             [self dismissViewControllerAnimated:YES completion:nil];
         }
     }];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (UIImage *)resizeImage:(UIImage *)image {
@@ -174,18 +188,27 @@
     [self.view addSubview:tipLabel];
     
     // 2> 名片按钮
-    UIButton *cardButton = [[UIButton alloc] init];
+    self.cardButton = [[UIButton alloc] init];
     
-    [cardButton setTitle:@"我的名片" forState:UIControlStateNormal];
-    cardButton.titleLabel.font = [UIFont systemFontOfSize:15];
-    [cardButton setTitleColor:self.navigationController.navigationBar.tintColor forState:UIControlStateNormal];
+    [self.cardButton setTitle:@"我的名片" forState:UIControlStateNormal];
+    self.cardButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    [self.cardButton setTitleColor:self.navigationController.navigationBar.tintColor forState:UIControlStateNormal];
     
-    [cardButton sizeToFit];
-    cardButton.center = CGPointMake(tipLabel.center.x, CGRectGetMaxY(tipLabel.frame) + kControlMargin);
+    [self.cardButton sizeToFit];
+    self.cardButton.center = CGPointMake(tipLabel.center.x, CGRectGetMaxY(tipLabel.frame) + kControlMargin);
     
-    [self.view addSubview:cardButton];
+    [self.view addSubview:self.cardButton];
+    [self.cardButton addTarget:self action:@selector(clickCardButton) forControlEvents:UIControlEventTouchUpInside];
     
-    [cardButton addTarget:self action:@selector(clickCardButton) forControlEvents:UIControlEventTouchUpInside];
+    self.flashLightButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.flashLightButton setFrame:CGRectMake((scannerBorder.frame.size.width-40)/2, scannerBorder.frame.size.height-60, 40, 40)];
+    [self.flashLightButton setImage:[self imageWithName:@"flashlight-off" bundle:@"HMScanner"]
+                      forState:UIControlStateNormal];
+    [self.flashLightButton setImage:[self imageWithName:@"flashlight-on" bundle:@"HMScanner"] forState:UIControlStateSelected];
+    [scannerBorder addSubview:self.flashLightButton];
+    [self.flashLightButton addTarget:self action:@selector(modifyFlashLight:) forControlEvents:UIControlEventTouchUpInside];
+    [self.cardButton setHidden:self.hideCardButton];
+    [self.flashLightButton setHidden:self.hideLightButton];
 }
 
 /// 准备扫描框
@@ -209,7 +232,6 @@
     [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithWhite:0.1 alpha:1.0]];
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.shadowImage = [[UIImage alloc] init];
-    
     // 2> 标题
     self.title = @"扫一扫";
     
@@ -217,5 +239,39 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(clickCloseButton)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"相册" style:UIBarButtonItemStylePlain target:self action:@selector(clickAlbumButton)];
 }
+
+#pragma mark - 封装处理
+
+- (UIImage *)imageWithName:(NSString *)imageName bundle:(NSString *)bundleName {
+    ///https://github.com/20120608/QM_HMQRCodeScanner
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSURL *url = [bundle URLForResource:bundleName withExtension:@"bundle"];
+    NSBundle *imageBundle = [NSBundle bundleWithURL:url];
+    NSString *fileName = [NSString stringWithFormat:@"%@@2x", imageName];
+    NSString *path = [imageBundle pathForResource:fileName ofType:@"png"];
+    return [[UIImage imageWithContentsOfFile:path] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+}
+
+- (BOOL)modifyFlashLight {
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    //修改前必须先锁定
+    [device lockForConfiguration:nil];
+    //必须判定是否有闪光灯，否则如果没有闪光灯会崩溃
+    BOOL isopen = false;
+    if ([device hasFlash]) {
+        if (device.flashMode == AVCaptureFlashModeOff) {
+            device.flashMode = AVCaptureFlashModeOn;
+            device.torchMode = AVCaptureTorchModeOn;
+            isopen = true;
+        } else if (device.flashMode == AVCaptureFlashModeOn) {
+            device.flashMode = AVCaptureFlashModeOff;
+            device.torchMode = AVCaptureTorchModeOff;
+            isopen = false;
+        }
+    }
+    [device unlockForConfiguration];
+    return isopen;
+}
+
 
 @end
